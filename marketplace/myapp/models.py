@@ -7,7 +7,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     price = models.FloatField()
-    file = models.FileField(upload_to='uploads')
+    file = models.FileField(upload_to='uploads', default='uploads/NoImageFound.png')
 
     def __str__(self):
         return self.name
