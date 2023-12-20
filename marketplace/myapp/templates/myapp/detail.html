@@ -1,8 +1,27 @@
 {% extends "myapp/base.html" %}
 
-
+<!-- Body starts here -->
 {% block body %}
 
-This is a detail view
+<div class="flex p-10">
+  <div>
+    <img
+      src="{{ product.file.url }}"
+      alt="{{ product.name }}"
+      class="w-full h-64 object-cover rounded-t-lg"
+    />
+  </div>
+  <div class="pl-10">
+    <div class="text-4xl mb-4">{{ product.name }}</div>
+    <div class="mb-4">{{ product.description }}</div>
+    <div class="mb-4 text-green-700 font-bold">&#8377; {{ product.price }}</div>
+    <div>
+      <button id="checkoutButton" class="bg-green-500 text-white px-4 py-2 rounded-md">
+        Buy Now
+      </button>
+    </div>
+  </div>
+</div>
 
+<!-- Body ends here -->
 {% endblock body %}
