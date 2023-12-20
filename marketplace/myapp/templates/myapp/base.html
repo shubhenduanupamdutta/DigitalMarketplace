@@ -5,12 +5,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block head %}
-    <title>Multivendor Digital Marketplace</title>
+    <title>Multi-Vendor Digital Marketplace</title>
     {% endblock head %}
     <link rel="stylesheet" href="{% static 'myapp/styles.css' %}" />
     {% block style %} {% endblock style %}
   </head>
   <body>
+    <nav class="shadow-lg p-4">
+      <div class="flex flex-wrap justify-between mr-4 items-center">
+        <a href="{% url 'index' %}" class="flex">
+          <img class="h-9 mr-3" src="{% static 'myapp/logo.png' %}" alt="logo" />
+          <span class="self-center text-xl font-semibold" id="logo-text">Digital Marketplace</span>
+        </a>
+        <div class="flex items-center">
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">Dashboard</a>
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">Sales</a>
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">Orders</a>
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">Create Products</a>
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">My Purchases</a>
+          <a href="" class="mr-4 text-sm font-bold text-gray-600">Logout</a>
+        </div>
+      </div>
+
+    </nav>
+
+
     {% block body %} {% endblock body %} {% block script %} {% endblock script %}
   </body>
 </html>
