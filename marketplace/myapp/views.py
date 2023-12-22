@@ -71,3 +71,7 @@ def payment_success_view(request):
     order.refresh_from_db()
 
     return render(request, 'myapp/payment_success.html', {"order": order})
+
+
+def payment_failed_view(request):
+    return render(request, 'myapp/payment_failed.html')
