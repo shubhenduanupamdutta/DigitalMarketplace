@@ -7,4 +7,5 @@ urlpatterns = [
     path('products/<int:id>/', views.detail, name='detail'),
     path('success/', views.payment_success_view, name='success'),
     path('failed/', views.payment_failed_view, name='failed'),
+    path('api/checkout-session/<int:id>/', views.create_checkout_session, name='stripe_checkout')
 ]
