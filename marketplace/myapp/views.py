@@ -23,39 +23,44 @@ def detail(request, id):
 
 @csrf_exempt
 def create_checkout_session(request, id):
-    request_data = json.load(request.body)
+    request_data = json.loads(request.body)
     product = Product.objects.get(id=id)
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
-    checkout_session = stripe.checkout.Session.create(
-        customer_email=request_data['email'],
-        payment_method_types=['card'],
-        line_items=[
-            {
-                'price_data': {
-                    'currency': 'inr',
-                    'product_data': {
-                        'name': product.name,
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            customer_email=request_data['email'],
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'inr',
+                        'product_data': {
+                            'name': product.name,
+                        },
+                        'unit_amount': int(product.price * 100),
                     },
-                    'unit_amount': int(product.price * 100),
-                },
-                'quantity': 1,
-            }
-        ],
-        mode='payment',
-        success_url=request.build_absolute_uri(reverse('success')) +
-        "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url=request.build_absolute_uri(reverse('failed'))
-    )
+                    'quantity': 1,
+                }
+            ],
+            mode='payment',
+            success_url=request.build_absolute_uri(reverse('success')) +
+            "?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=request.build_absolute_uri(reverse('failed'))
+        )
+        print(checkout_session)
 
-    order = OrderDetail()
-    order.customer_email = request_data['email']
-    order.product = product
-    order.stripe_payment_intent = checkout_session.payment_intent  # type: ignore
-    order.amount = int(product.price)
-    order.save()
+        order = OrderDetail()
+        order.customer_email = request_data['email']
+        order.product = product
+        order.amount = int(product.price)
+        order.strip_session_id = checkout_session.id
+        order.save()
 
-    return JsonResponse({'sessionId': checkout_session.id})
+        return JsonResponse({'sessionId': checkout_session.id})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'error': str(e)})
 
 
 def payment_success_view(request):
@@ -65,7 +70,7 @@ def payment_success_view(request):
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
     session = stripe.checkout.Session.retrieve(session_id)
-    order = get_object_or_404(OrderDetail, stripe_payment_intent=session.payment_intent)
+    order = get_object_or_404(OrderDetail, strip_session_id=session.id)
     order.has_paid = True
     order.save()
     order.refresh_from_db()

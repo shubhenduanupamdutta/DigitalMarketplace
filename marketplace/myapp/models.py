@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 
 # Create your models here.
@@ -17,7 +18,7 @@ class OrderDetail(models.Model):
     customer_email = models.EmailField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.IntegerField()
-    stripe_payment_intent = models.CharField(max_length=255)
+    strip_session_id = models.CharField(max_length=512, unique=True)
     has_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

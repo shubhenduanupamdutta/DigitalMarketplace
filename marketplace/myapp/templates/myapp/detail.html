@@ -5,11 +5,7 @@
 
 <div class="flex p-10">
   <div>
-    <img
-      src="{{ product.file.url }}"
-      alt="{{ product.name }}"
-      class="w-full h-64 object-cover rounded-t-lg"
-    />
+    <img src="{{ product.file.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-t-lg" />
   </div>
   <div class="pl-10">
     <div class="text-4xl mb-4">{{ product.name }}</div>
@@ -20,8 +16,44 @@
         Buy Now
       </button>
     </div>
+    <div id="myEmail" hidden>
+      {{ request.user.email }}
+    </div>
   </div>
 </div>
 
 <!-- Body ends here -->
 {% endblock body %}
+
+{% block script %}
+
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+  let stripe = Stripe('{{ stripe_public_key }}')
+  const checkoutButton = document.getElementById("checkoutButton");
+  checkoutButton.addEventListener('click', function () {
+    console.log("Checkout button clicked");
+    const email = document.getElementById("myEmail").innerText.trim();
+    console.log(email);
+    if (email.length === 0) {
+      alert("Please login/register with email to buy this product");
+      return;
+    }
+    fetch("{% url 'stripe_checkout' id=product.id %}", {
+      method: "POST",
+      body: JSON.stringify({ 'email': email })
+    }).then(function (response) {
+      return response.json();
+    }).then(function (session) {
+      return stripe.redirectToCheckout({ sessionId: session.sessionId });
+    }).then(function (result) {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    }).catch(function (error) {
+      console.error("Error:", error);
+    })
+  })
+</script>
+
+{% endblock script %}
