@@ -1,0 +1,21 @@
+{% extends "myapp/base.html" %} {% block body %}
+
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <h1 class="text-4xl font-bold">Are you sure you want to delete the product?</h1>
+  <form action="{% url 'delete_product' product.id %}" method="POST">
+    {% csrf_token %}
+    <button
+      type="submit"
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+    >
+      Confirm
+    </button>
+  </form>
+  <a
+    href="{% url 'index' %}"
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+    >Cancel</a
+  >
+</div>
+
+{% endblock body %}

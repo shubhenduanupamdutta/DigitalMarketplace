@@ -101,3 +101,11 @@ def edit_product(request, id):
         product_form.save()
         return redirect('index')
     return render(request, 'myapp/edit_product.html', {'form': product_form})
+
+
+def delete_product(request, id):
+    product = Product.objects.get(id=id)
+    if request.method == "POST":
+        product.delete()
+        return redirect('index')
+    return render(request, 'myapp/delete_product.html', {'product': product})
