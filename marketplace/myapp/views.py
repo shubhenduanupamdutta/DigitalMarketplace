@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponseNotFound, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import ProductForm
@@ -85,5 +85,10 @@ def payment_failed_view(request):
 
 
 def create_product(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
     form = ProductForm()
     return render(request, 'myapp/create_product.html', {'form': form})
