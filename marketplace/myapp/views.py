@@ -2,6 +2,8 @@ import json
 from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+
+from .forms import ProductForm
 from .models import OrderDetail, Product
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -80,3 +82,8 @@ def payment_success_view(request):
 
 def payment_failed_view(request):
     return render(request, 'myapp/payment_failed.html')
+
+
+def create_product(request):
+    form = ProductForm()
+    return render(request, 'myapp/create_product.html', {'form': form})
