@@ -100,7 +100,7 @@ def edit_product(request, id):
     if request.method == "POST" and product_form.is_valid():
         product_form.save()
         return redirect('index')
-    return render(request, 'myapp/edit_product.html', {'form': product_form})
+    return render(request, 'myapp/edit_product.html', {'form': product_form, 'id': id})
 
 
 def delete_product(request, id):
