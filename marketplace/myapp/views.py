@@ -92,3 +92,12 @@ def create_product(request):
             return redirect('index')
     form = ProductForm()
     return render(request, 'myapp/create_product.html', {'form': form})
+
+
+def edit_product(request, id):
+    product = Product.objects.get(id=id)
+    product_form = ProductForm(request.POST or None, request.FILES or None, instance=product)
+    if request.method == "POST" and product_form.is_valid():
+        product_form.save()
+        return redirect('index')
+    return render(request, 'myapp/edit_product.html', {'form': product_form})
