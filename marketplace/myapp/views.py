@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-
+from django.db.models import Sum
 from .forms import ProductForm, UserRegistrationForm
 from .models import OrderDetail, Product
 from django.conf import settings
@@ -152,4 +152,10 @@ def my_purchases(request):
 
 
 def sales(request):
-    return render(request, 'myapp/sales.html')
+    orders = OrderDetail.objects.filter(product__seller=request.user)
+    total_sales = orders.aggregate(Sum('amount'))
+    context = {
+        "orders": orders,
+        "total_sales": total_sales,
+    }
+    return render(request, 'myapp/sales.html', context)
