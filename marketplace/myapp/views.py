@@ -1,4 +1,3 @@
-from calendar import c
 import json
 from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -75,6 +74,12 @@ def payment_success_view(request):
     session = stripe.checkout.Session.retrieve(session_id)
     order = get_object_or_404(OrderDetail, strip_session_id=session.id)
     order.has_paid = True
+    # ########## This is for updating sales stats for a product ############
+    product = Product.objects.get(id=order.product.id)  # type: ignore
+    product.total_sales_amount += int(product.price)
+    product.total_sales += 1
+    product.save()
+    # ########## This is for updating sales stats for a product ############
     order.save()
     order.refresh_from_db()
 
