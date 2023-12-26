@@ -3,7 +3,7 @@ from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import ProductForm
+from .forms import ProductForm, UserRegistrationForm
 from .models import OrderDetail, Product
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -114,3 +114,16 @@ def delete_product(request, id):
 def dashboard(request):
     products = Product.objects.all()
     return render(request, 'myapp/dashboard.html', {'products': products})
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.set_password(form.cleaned_data["password"])
+            new_user.save()
+            return redirect('index')
+
+    form = UserRegistrationForm()
+    return render(request, 'myapp/register.html', {'form': form})
