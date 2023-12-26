@@ -23,12 +23,10 @@
           <a href="" class="mr-4 text-sm font-bold text-gray-600">Orders</a>
           <a href="" class="mr-4 text-sm font-bold text-gray-600">Create Products</a>
           <a href="" class="mr-4 text-sm font-bold text-gray-600">My Purchases</a>
-          <a href="" class="mr-4 text-sm font-bold text-gray-600">Logout</a>
+          <a href="{% url 'logout' %}" class="mr-4 text-sm font-bold text-gray-600">Logout</a>
         </div>
       </div>
-
     </nav>
-
 
     {% block body %} {% endblock body %} {% block script %} {% endblock script %}
   </body>
