@@ -1,0 +1,15 @@
+{% extends "myapp/base.html" %}
+<!-- Body starts here. -->
+{% block body %}
+
+<div class="flex justify-between">
+  <div class="ml-10 mt-10 font-bold text-xl">Sales Stats </div>
+  <div class="mr-20 mt-10">
+    <a href="{% url 'dashboard' %}" class="bg-green-500 text-white font-bold px-4 py-2">
+      Dashboard </a>
+
+  </div>
+</div>
+
+<!-- Body ends here. -->
+{% endblock body %}
