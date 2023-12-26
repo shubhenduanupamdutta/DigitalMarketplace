@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="flex flex-col items-center justify-center min-h-screen">
-  <h1 class="font-bold text-lg"> 🔐 Register </h1>
+  <h1 class="font-bold text-lg">🔐 Register</h1>
   <form class="shadow-lg p-10 w-1/4" action="" method="post">
     {% csrf_token %}
     <div class="mb-2">
@@ -29,8 +29,10 @@
     <input class="bg-green-500 text-white px-4 py-2 rounded-md" type="submit" value="Create User" />
   </form>
 
-  <p class="m-10"> Already Registered? <span><a class="text-indigo-500" href="{% url 'login' %}"> Click Here</a> to
-    login </span></p
+  <p class="m-10">
+    Already Registered?
+    <span><a class="text-indigo-500" href="{% url 'login' %}"> Click Here</a> to login </span>
+  </p>
 </div>
 
 <!-- Body ends here -->
