@@ -1,11 +1,36 @@
 {% extends "myapp/base.html" %}
-
+<!-- Body Starts here -->
 {% block body %}
 
-<form action="" method="post">
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <h1 class="font-bold text-lg"> 🔐 Register </h1>
+  <form class="shadow-lg p-10 w-1/4" action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Create User">
-</form>
+    <div class="mb-2">
+      <label for="id_username">Username</label>
+      <div class="mt-2 border rounded-sm py-2 px-2 mr-10">{{ form.username }}</div>
+    </div>
+    <div class="mb-2">
+      <label for="id_email">Email</label>
+      <div class="mt-2 border rounded-sm py-2 px-2 mr-10">{{ form.email }}</div>
+    </div>
+    <div class="mb-2">
+      <label for="id_first_name">First Name</label>
+      <div class="mt-2 border rounded-sm py-2 px-2 mr-10">{{ form.first_name }}</div>
+    </div>
+    <div class="mb-2">
+      <label for="id_password">Password</label>
+      <div class="mt-2 border rounded-sm py-2 px-2 mr-10">{{ form.password }}</div>
+    </div>
+    <div class="mb-2">
+      <label for="id_confirm_password">Confirm Password</label>
+      <div class="mt-2 border rounded-sm py-2 px-2 mr-10">{{ form.confirm_password }}</div>
+    </div>
+    <input class="bg-green-500 text-white px-4 py-2 rounded-md" type="submit" value="Create User" />
+  </form>
+</div>
 
+
+
+<!-- Body ends here -->
 {% endblock body %}
