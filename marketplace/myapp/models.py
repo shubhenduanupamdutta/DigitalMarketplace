@@ -10,6 +10,8 @@ class Product(models.Model):
     description = models.CharField(max_length=255)
     price = models.FloatField()
     file = models.FileField(upload_to='uploads', default='uploads/NoImageFound.png')
+    total_sales_amount = models.IntegerField(default=0)
+    total_sales = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
