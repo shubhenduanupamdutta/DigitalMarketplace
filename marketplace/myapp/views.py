@@ -88,7 +88,9 @@ def create_product(request):
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            new_product = form.save(commit=False)
+            new_product.seller = request.user
+            new_product.save()
             return redirect('index')
     form = ProductForm()
     return render(request, 'myapp/create_product.html', {'form': form})
