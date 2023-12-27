@@ -19,24 +19,42 @@
 <div class="flex">
   <div class="p-5 w-1/3">
     <div class="shadow-lg p-10">
-      <div class="text-4xl font-bold">{{ yearly_sales.amount__sum }}</div>
+      <div class="text-4xl font-bold">&#8377;{{ yearly_sales.amount__sum }}</div>
       <div> Last 365 Days </div>
     </div>
   </div>
 
   <div class="p-5 w-1/3">
     <div class="shadow-lg p-10">
-      <div class="text-4xl font-bold">{{ monthly_sales.amount__sum }}</div>
+      <div class="text-4xl font-bold">&#8377;{{ monthly_sales.amount__sum }}</div>
       <div> Last 30 Days </div>
     </div>
   </div>
 
   <div class="p-5 w-1/3">
     <div class="shadow-lg p-10">
-      <div class="text-4xl font-bold">{{ weekly_sales.amount__sum }}</div>
+      <div class="text-4xl font-bold">&#8377;{{ weekly_sales.amount__sum }}</div>
       <div> Last 7 Days </div>
     </div>
   </div>
 </div>
+
+<div class="flex">
+  <div class="w-1/2 shadow-lg m-10">
+    <div class="ml-10 mt-10 font-bold text-lg"> 30 Day Sales </div>
+    <div class="flex ml-10 my-5">
+      <div class="w-1/2 font-bold"> Day </div>
+      <div class="w-1/2 font-bold"> Total Sales </div>
+    </div>
+    {% for daily_sales_sum in daily_sales_sums %}
+    <div class="flex ml-10 my-5">
+      <div class="w-1/2"> {{ daily_sales_sum.created_at__date }} </div>
+      <div class="w-1/2 font-bold text-green-400"> &#8377;{{ daily_sales_sum.sum }} </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
 <!-- Body ends here. -->
 {% endblock body %}

@@ -7,8 +7,8 @@ from .forms import ProductForm, UserRegistrationForm
 from .models import OrderDetail, Product
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 import stripe
-import datetime
 # Create your views here.
 
 
@@ -157,22 +157,29 @@ def sales(request):
     total_sales = orders.aggregate(Sum('amount'))
 
     # 365 days sales sum
-    last_year = datetime.datetime.today() - datetime.timedelta(days=365)
+    last_year = timezone.now() - timezone.timedelta(days=365)
     yearly_data = OrderDetail.objects.filter(
         product__seller=request.user, created_at__gte=last_year)
     yearly_sales = yearly_data.aggregate(Sum('amount'))
 
     # 30 days sales sum
-    last_month = datetime.datetime.today() - datetime.timedelta(days=30)
+    last_month = timezone.now() - timezone.timedelta(days=30)
     monthly_data = OrderDetail.objects.filter(
         product__seller=request.user, created_at__gte=last_month)
     monthly_sales = monthly_data.aggregate(Sum('amount'))
 
     # 7 days sales sum
-    last_week = datetime.datetime.today() - datetime.timedelta(days=7)
+    last_week = timezone.now() - timezone.timedelta(days=7)
     weekly_data = OrderDetail.objects.filter(
         product__seller=request.user, created_at__gte=last_week)
     weekly_sales = weekly_data.aggregate(Sum('amount'))
+
+    # Every day sum for the past 30 days
+    daily_sales_sums = OrderDetail.objects\
+        .filter(product__seller=request.user)\
+        .values("created_at__date")\
+        .order_by("created_at__date")\
+        .annotate(sum=Sum("amount"))
 
     context = {
         "orders": orders,
@@ -180,5 +187,6 @@ def sales(request):
         "yearly_sales": yearly_sales,
         "monthly_sales": monthly_sales,
         "weekly_sales": weekly_sales,
+        "daily_sales_sums": daily_sales_sums,
     }
     return render(request, 'myapp/sales.html', context)
