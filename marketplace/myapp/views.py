@@ -176,9 +176,15 @@ def sales(request):
 
     # Every day sum for the past 30 days
     daily_sales_sums = OrderDetail.objects\
-        .filter(product__seller=request.user)\
+        .filter(product__seller=request.user, created_at__gte=last_month)\
         .values("created_at__date")\
         .order_by("created_at__date")\
+        .annotate(sum=Sum("amount"))
+
+    product_sales_sums = OrderDetail.objects\
+        .filter(product__seller=request.user, created_at__gte=last_month)\
+        .values("product__name")\
+        .order_by("product__name")\
         .annotate(sum=Sum("amount"))
 
     context = {
@@ -188,5 +194,6 @@ def sales(request):
         "monthly_sales": monthly_sales,
         "weekly_sales": weekly_sales,
         "daily_sales_sums": daily_sales_sums,
+        "product_sales_sums": product_sales_sums,
     }
     return render(request, 'myapp/sales.html', context)
