@@ -40,7 +40,7 @@
 </div>
 
 <div class="flex">
-  <div class="w-1/2 shadow-lg m-10">
+  <div class="w-1/2 shadow-lg m-10" id="salesTable">
     <div class="ml-10 mt-10 font-bold text-lg"> 30 Day Sales </div>
     <div class="flex ml-10 my-5">
       <div class="w-1/2 font-bold"> Day </div>
@@ -48,13 +48,120 @@
     </div>
     {% for daily_sales_sum in daily_sales_sums %}
     <div class="flex ml-10 my-5">
-      <div class="w-1/2"> {{ daily_sales_sum.created_at__date }} </div>
-      <div class="w-1/2 font-bold text-green-400"> &#8377;{{ daily_sales_sum.sum }} </div>
+      <div class="w-1/2 created-date"> {{ daily_sales_sum.created_at__date }} </div>
+      <div class="w-1/2 day-sum font-bold text-green-400"> &#8377;{{ daily_sales_sum.sum }} </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="w-1/2 shadow-lg m-10 p-4">
+    <div class="font-bold text-2xl">Sale for Last 30 days</div>
+    <div>
+      <canvas id="dailySalesChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="flex">
+  <div class="w-1/2 shadow-lg m-10 p-4">
+    <div class="font-bold text-2xl">Product Sales for last 30 days</div>
+    <div><canvas id="productSalesChart"></canvas></div>
+  </div>
+  <div class="w-1/2 shadow-lg m-10">
+    <div class="ml-10 mt-10 font-bold text-lg"> Product Sales for last 30 days</div>
+    <div class="flex ml-10 my-5">
+      <div class="w-1/2 font-bold"> Day </div>
+      <div class="w-1/2 font-bold"> Total Sales </div>
+    </div>
+    {% for product_sales_sum in product_sales_sums %}
+    <div class="flex ml-10 my-5">
+      <div class="w-1/2 product-name"> {{ product_sales_sum.product__name }} </div>
+      <div class="w-1/2 product-sum font-bold text-green-400"> &#8377;{{ product_sales_sum.sum }} </div>
     </div>
     {% endfor %}
   </div>
 </div>
 
-
 <!-- Body ends here. -->
 {% endblock body %}
+
+{% block script %}
+<script>
+
+  const daySums = document.getElementsByClassName('day-sum');
+  const daySumsArray = [];
+  for (let i = 0; i < daySums.length; i++) {
+    daySum = parseInt(daySums[i].innerText.slice(1));
+    // console.log(daySum);
+    daySumsArray.push(daySum);
+  }
+  // console.log(daySumsArray);
+
+  const dates = document.getElementsByClassName('created-date');
+  const datesArray = [];
+  for (let i = 0; i < dates.length; i++) {
+    date = dates[i].innerText;
+    // console.log(date);
+    datesArray.push(date);
+  }
+  const ctx = document.getElementById('dailySalesChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: datesArray,
+      datasets: [{
+        label: 'Sales for last 30 days',
+        data: daySumsArray,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const productSums = document.getElementsByClassName('product-sum');
+  const productSumsArray = [];
+  for (let i = 0; i < productSums.length; i++) {
+    productSum = parseInt(productSums[i].innerText.slice(1));
+    // console.log(productSum);
+    productSumsArray.push(productSum);
+  }
+  const productNames = document.getElementsByClassName('product-name');
+  const productNamesArray = [];
+  for (let i = 0; i < productNames.length; i++) {
+    productName = productNames[i].innerText;
+    // console.log(productName);
+    productNamesArray.push(productName);
+  }
+
+  const ctx2 = document.getElementById('productSalesChart');
+
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: productNamesArray,
+      datasets: [{
+        label: 'Product Sales for last 30 days',
+        data: productSumsArray,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+</script>
+
+
+{% endblock script %}
